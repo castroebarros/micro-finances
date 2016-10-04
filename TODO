@@ -1,0 +1,18 @@
+TODO
+
+[current interation]
+- Create payment model 
+- Test payment model
+- Create category model
+- Test category model
+- Create models generator
+- Test models generators
+- Publish the gem
+
+[backlog]
+- Write basic documentation
+- Publish the gem
+- Create controllers and views
+- Test controllers
+- Create view generators
+- Test views generetors
