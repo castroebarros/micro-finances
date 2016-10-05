@@ -1,18 +1,23 @@
-TODO
+Current interation
+====================
 
-[current interation]
-- Create payment model 
-- Test payment model
-- Create category model
-- Test category model
-- Create models generator
-- Test models generators
-- Publish the gem
+Objective: 
+  To allow that someone plug in the Payment model in a new project.
 
-[backlog]
-- Write basic documentation
-- Publish the gem
-- Create controllers and views
-- Test controllers
-- Create view generators
-- Test views generetors
+Tasks:
+  x Create Payment model with basic fields: description, due date, payment
+    date, due value, payment value.
+  x Create commons scopes: revenue, cost, open, confirmed and with_interest.
+  - Add polymorphic association to allow associate payments to a any model,
+    like a client or a contract.
+  x Test Payment model
+  - Publish the gem
+
+Backlog:
+  - Write basic documentation
+  - Create Category model
+  - Create recurring payments feature
+  - Create basic controllers and views
+  - Test controllers
+  - Create view generators
+  - Test views generetors
