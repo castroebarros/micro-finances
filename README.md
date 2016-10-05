@@ -6,7 +6,7 @@ companies.
 
 ## Usage
 
-How to use my plugin.
+TODO
 
 ## Installation
 
