@@ -53,5 +53,13 @@ module Micro::Finances
       assert_equal 0, p.interest
     end
 
+    test "it should be able to associate itself to a any model, like a Client" do
+      client = ::Client.new
+      payment = micro_payments(:contract)
+      payment.payable = client
+      payment.save
+
+      assert_equal [payment], client.payments 
+    end
   end
 end

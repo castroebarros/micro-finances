@@ -8,6 +8,8 @@ module Micro::Finances
     scope :confirmed,     -> { where('payment_date IS NOT NULL') }
     scope :with_interest, -> { where(effect: 'cost') }
 
+    belongs_to :payable, polymorphic: true 
+
     def interest
       if payment_value
         payment_value - due_value
