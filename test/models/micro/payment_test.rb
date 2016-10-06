@@ -43,6 +43,24 @@ module Micro::Finances
       assert p.errors[:due_value].include?("can't be blank")
     end
 
+    test "it should validate presence of effect" do
+      p = Payment.new
+      assert p.invalid?
+      assert p.errors[:effect].include?("can't be blank")
+    end
+
+    test "#revenue? should return true when it is a revenue" do
+      p = Payment.new effect: 'revenue'
+      assert p.revenue?
+      assert !p.cost?
+    end
+
+    test "#cost? should return true when it is a costs" do
+      p = Payment.new effect: 'cost'
+      assert p.cost?
+      assert !p.revenue?
+    end
+
     test "#interest should return the difference between due and paid values" do
       p = Payment.new(due_value: 10, payment_value: 15)
       assert_equal 5, p.interest
