@@ -35,7 +35,7 @@ salary.due_value   = 8_000
 salary.save
 
 energy = Micro::Finances::Payment.new
-energy.effect        = 'costs'
+energy.effect        = 'cost'
 energy.description   = 'Energy bill'
 energy.due_date      = Date.new(2016, 9, 10)
 energy.due_value     = 300
