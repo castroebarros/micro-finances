@@ -1,6 +1,6 @@
 module Micro::Finances
   class Payment < ApplicationRecord
-    validates :description, :due_date, :due_value, presence: true
+    validates :description, :effect, :due_date, :due_value, presence: true
 
     scope :revenue,       -> { where(effect: 'revenue') }
     scope :cost,          -> { where(effect: 'cost') }
@@ -16,6 +16,14 @@ module Micro::Finances
       else
         0
       end
+    end
+
+    def revenue?
+      self.effect == 'revenue'
+    end
+
+    def cost?
+      self.effect == 'cost'
     end
   end
 end
