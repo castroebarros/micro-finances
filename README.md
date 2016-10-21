@@ -68,7 +68,14 @@ $ rake db:migrate
 ```
 
 ## Contributing
-Contribution directions go here.
+
+When you clone this project you will need to create the test database before
+to run the tests.
+
+```bash
+rake db:reset RAILS_ENV=test
+rake test
+```
 
 ## License
 The gem is available as open source under the terms of the [MIT
