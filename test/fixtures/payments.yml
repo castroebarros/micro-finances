@@ -1,6 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 _fixture:
-  model_class: "Micro::Finances::Payment"
+  model_class: "Payment"
 
 contract:
   description: Contract Nº 3001

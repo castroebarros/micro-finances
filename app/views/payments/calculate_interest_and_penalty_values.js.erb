@@ -1,0 +1,7 @@
+<% if @error %>
+  alert("<%= @error %>")
+<% else %>
+  $("#payment_interest_value").val('<%= @payment.interest_value.reais %>')
+  $("#payment_penalty_value").val('<%= @payment.penalty_value.reais %>')
+  $("#payment_payment_value").val('<%= @payment.payment_value.reais %>')
+<% end %>

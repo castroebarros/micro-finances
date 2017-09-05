@@ -10,11 +10,10 @@ revenues/costs, cashflow and charging.
 ## Usage
 
 After install the gem and run its the migrations you will have a model called
-Micro::Finances::Payment available to record the incomes and costs of the
-company.
+Payment available to record the incomes and costs of the company.
 
 The Payment model has the following attributes:
-* description: the description of payment, like: "References contract of number
+* description: the description of payment, like: "References contract number
   103"
 * effect: to inform if it's a revenue or a costs
 * due date: the date when the payment should be realized
@@ -27,15 +26,15 @@ The Payment model has the following attributes:
 With this you can start creating payments:
 
 ```ruby
-salary = Micro::Finances::Payment.new
-salary.effect      = 'revenue'
+salary = Payment.new
+salary.effect      = :revenue # default value: :revenue
 salary.description = "Salary of September, 2016"
 salary.due_date    = Date.new(2016, 9, 5)
 salary.due_value   = 8_000
 salary.save
 
-energy = Micro::Finances::Payment.new
-energy.effect        = 'cost'
+energy = Payment.new
+energy.effect        = :cost
 energy.description   = 'Energy bill'
 energy.due_date      = Date.new(2016, 9, 10)
 energy.due_value     = 300
@@ -65,6 +64,57 @@ $ rails micro_finances:install:migrations
 And then run:
 ```bash
 $ rake db:migrate
+```
+
+## Integrating with models
+
+Payment has a polymorphic association that allows you to add payment to any
+model you need. This way you can use it, for example, on Project, Invoice,
+Client, etc.
+
+```ruby
+class Client < ApplicationRecord
+  has_many :payments, as: :payable
+end
+```
+
+## Integrating with views
+
+Add this entry in your application.js manifest:
+
+```
+//= require micro/finances/payments
+```
+
+In your view:
+
+```
+<%= link_to "New Payment", 
+            new_payment_path(
+              payable_id: @client, 
+              payable_type: "Client", 
+              return_to: request.url
+            ),
+            class: 'btn btn-default btn-xs pull-right' %>
+```
+
+The `return_to` parameter is responsible to indicate witch is the next page you
+would like to be redirected after save the payment.
+
+
+
+## Handling taxes of revenues
+
+Micro::Finances is able to calculate interests and penalties of late payments.
+To use this feature, you need to enable the configuration in a initializer
+file, like config/initializers/micro_finances.rb:
+
+```
+Payment.config.merge({ 
+  :interest_enabled = true,  # default: false
+  :interest_rate    = 0.7,   # Rate used to calculate the interest value based on due value.
+  :penalty_daily    = 0.75   # Amount of money increased every day as dialy penalty.
+})
 ```
 
 ## Contributing

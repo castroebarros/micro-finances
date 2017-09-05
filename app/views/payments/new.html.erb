@@ -1,0 +1,6 @@
+<h1>
+  <%= t('scaffolds.new', default: t('helpers.links.new')) %>
+  <%= Payment.model_name.human %>
+</h1>
+
+<%= render 'form', payment: @payment %>

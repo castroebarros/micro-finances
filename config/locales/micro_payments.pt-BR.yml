@@ -1,0 +1,15 @@
+# encoding: UTF-8
+pt-BR:
+  activerecord:
+    models:
+      payment: Pagamento
+    attributes:
+      payment:
+        description: Descrição
+        due_date: Data prevista
+        due_value: Valor previsto
+        interest_value: Multa
+        penalty_value: Juros
+        discount_value: Desconto
+        payment_date: Data em que foi realizado
+        payment_value: Valor realizado

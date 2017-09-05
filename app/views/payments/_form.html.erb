@@ -1,0 +1,148 @@
+<div class="panel panel-default">
+  <%= simple_form_for(payment) do |f| %>
+    <%= hidden_field_tag :return_to, params[:return_to] %>
+    <div class="panel-body">
+      <% if payment.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
+
+          <ul>
+          <% payment.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= f.hidden_field :payable_id %>
+      <%= f.hidden_field :payable_type %>
+
+      <div class="row">
+        <%= f.input :description, wrapper_html: { class: 'col-md-6 ' } %>
+
+        <div class="col-md-6">
+          <%# f.label :type, "Classificação da #{@movimento.type}" %>
+          <%# f.hidden_field :type %>
+          <%# f.collection_select :tipo_id, TipoMovimento.with_efeito(@movimento.type.downcase).sort_by(&:descricao_completa), 
+                                  :id, :descricao_completa, {}, :class => 'form-control' %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :due_date %>
+            <%= f.date_field :due_date, :class => 'form-control' %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :due_value %>
+            <%= f.text_field :due_value, :class => 'form-control money', precision: 2 %>
+          </div>
+        </div>
+      </div>
+
+      <% if payment.revenue? and interest_enabled %>
+        <div class="taxes">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- blank space -->
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :interest_value %>
+                <%= f.text_field :interest_value, :class => 'form-control money', precision: 2 %>
+              </div>
+              <div class="form-group">
+                <%= f.label :penalty_value %>
+                <%= f.text_field :penalty_value, :class => 'form-control money', precision: 2 %>
+              </div>
+              <div class="form-group">
+                <%= f.label :discount_value %>
+                <%= f.text_field :discount_value, :class => 'form-control money', precision: 2 %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :payment_date %>
+            <%= f.date_field :payment_date, :class => 'form-control' %>
+            <%= link_to 'Preencher como previsto', '', class: 'btn btn-default btn-sm', style: 'margin-top: 5px', id: 'cp-due-date' %>
+            <%= link_to 'Preencher com hoje', '', class: 'btn btn-default btn-sm', style: 'margin-top: 5px', id: 'cp-today-date' %>
+            <%= link_to '<i class="fa fa-eraser"></i>'.html_safe, '', 
+                        class: 'btn btn-default btn-sm', style: 'margin-top: 5px', id: 'reset-payment-date' %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :payment_value %>
+            <%= f.text_field :payment_value, :class => 'form-control money', precision: 2 %>
+            <%= link_to 'Preencher como previsto', '', class: 'btn btn-default btn-sm', style: 'margin-top: 5px', id: 'cp-due-value' %>
+            <% if interest_enabled %>
+              <%= link_to 'Aplicar multa e juros', '', class: 'btn btn-default btn-sm', style: 'margin-top: 5px', id: 'calculate-interest' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <%# f.label :type, "Classificação da #{@movimento.type}" %>
+            <%# f.hidden_field :type %>
+            <%# f.collection_select :tipo_id, TipoMovimento.with_efeito(@movimento.type.downcase).sort_by(&:descricao_completa), 
+                                    :id, :descricao_completa, {}, :class => 'form-control' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <%= f.submit t("helpers.links.save"), :class => 'btn btn-primary' %>
+        <%= link_to t("helpers.links.cancel"), :back, :class => 'btn btn-default' %>
+        <%# link_to "<i class='fa fa-trash-o'></i> Deletar".html_safe, movimento_path(@movimento), 
+                      :method => :delete, 
+                      :data => {:confirm => "Tem certeza?"},
+                      :class => 'btn btn-danger pull-right' unless @movimento.new_record? %>
+        <%# link_to "<i class='fa fa-trash-o'></i> Deletar".html_safe, movimento_path(@movimento), 
+                      :data => {:toggle => "modal", :target => '#modal'},
+                      :class => 'btn btn-danger pull-right' if @movimento.persisted? %>
+      </div>
+
+    </div>
+  <% end %>
+</div>
+
+<% if false %>
+  <div id="modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Quer mesmo apagar?</h4>
+        </div>
+          <div class="modal-body">
+            <% if @movimento.seguintes.any? %>
+              Esse lançamento é programado e se repete no futuro.<br />
+              Você quer apagar apenas esse ou esse e os seguintes?
+            <% else %>
+              Você quer mesmo apagar esse registro? <br />
+              Essa operação não poderá ser contornada.
+            <% end %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+            <% if @movimento.seguintes.any? %>
+              <%= link_to "Apagar apenas esse", movimento_path(@movimento), method: :delete, class: 'btn btn-danger' %>
+              <%= link_to "Apagar esse e os seguintes", movimento_path(@movimento, seguintes: true), method: :delete, class: 'btn btn-danger' %>
+            <% else %>
+              <%= link_to "Sim, quero apagar", movimento_path(@movimento), method: :delete, class: 'btn btn-danger' %>
+            <% end %>
+          </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<% end %>
