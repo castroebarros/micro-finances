@@ -47,7 +47,7 @@ class PaymentsController < ::ApplicationController
   # DELETE /payments/1
   def destroy
     @payment.destroy
-    redirect_to payments_url, notice: 'Payment was successfully destroyed.'
+    redirect_to @return_to || payments_url, notice: 'Payment was successfully destroyed.'
   end
 
   # GET /pauyments/calculate_interest_and_penalty_values.js
