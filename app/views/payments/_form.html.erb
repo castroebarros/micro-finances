@@ -115,34 +115,3 @@
     </div>
   <% end %>
 </div>
-
-<div id="modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Quer mesmo apagar?</h4>
-      </div>
-        <div class="modal-body">
-          <%# if @payment.seguintes.any? %>
-            <!--
-            Esse lançamento é programado e se repete no futuro.<br />
-            Você quer apagar apenas esse ou esse e os seguintes?
-            -->
-          <%# else %>
-            Você quer mesmo apagar esse registro? <br />
-            Essa operação não poderá ser contornada.
-          <%# end %>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-          <%# if @payment.seguintes.any? %>
-            <%# link_to "Apagar apenas esse", payment_path(@payment), method: :delete, class: 'btn btn-danger' %>
-            <%# link_to "Apagar esse e os seguintes", payment_path(@payment, seguintes: true), method: :delete, class: 'btn btn-danger' %>
-          <%# else %>
-            <%= link_to "Sim, quero apagar", payment_path(@payment, return_to: params[:return_to]), method: :delete, class: 'btn btn-danger' %>
-          <%# end %>
-        </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
