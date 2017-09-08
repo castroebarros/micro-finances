@@ -16,3 +16,4 @@ gemspec
 gem 'simple_form'
 gem 'enumerize'
 gem 'coffee-rails'
+gem 'brdinheiro'

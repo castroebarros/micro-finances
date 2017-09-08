@@ -45,6 +45,7 @@ module Micro::Finances
 
     test "it should validate presence of effect" do
       p = Payment.new
+      p.effect = nil
       assert p.invalid?
       assert p.errors[:effect].include?("can't be blank")
     end
