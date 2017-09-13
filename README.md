@@ -110,10 +110,10 @@ To use this feature, you need to enable the configuration in a initializer
 file, like config/initializers/micro_finances.rb:
 
 ```
-Payment.config.merge({ 
-  :interest_enabled = true,  # default: false
-  :interest_rate    = 0.7,   # Rate used to calculate the interest value based on due value.
-  :penalty_daily    = 0.75   # Amount of money increased every day as dialy penalty.
+Payment.config.merge!({ 
+  :interest_enabled => true,  # default: false
+  :interest_rate    => 0.7,   # Rate used to calculate the interest value based on due value.
+  :penalty_daily    => 0.75   # Amount of money increased every day as dialy penalty.
 })
 ```
 
