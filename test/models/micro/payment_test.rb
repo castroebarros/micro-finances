@@ -19,6 +19,10 @@ module Micro::Finances
       assert_equal [payments(:contract)], Payment.not_paid.to_a
     end
 
+    test "Payment.late should return all not paid with due date in the past" do
+      assert_equal [payments(:contract)], Payment.late.to_a
+    end
+
     test "it should validate presence of description" do
       p = Payment.new
       assert p.invalid?

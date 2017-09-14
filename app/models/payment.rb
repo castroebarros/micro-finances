@@ -15,6 +15,7 @@ class Payment < Micro::Finances::ApplicationRecord
   scope :cost,             -> { where(effect: 'cost') }
   scope :paid,             -> { where.not(payment_date: nil) }
   scope :not_paid,         -> { where(payment_date: nil) }
+  scope :late,             -> { not_paid.where("due_date < ?", Date.today) }
 
   belongs_to :payable, polymorphic: true 
 
@@ -32,8 +33,8 @@ class Payment < Micro::Finances::ApplicationRecord
 
   def late?
     return false if due_date.future?
-    
-    (payment_date and payment_date > due_date)
+    return true  if payment_date.nil?
+    return true  if payment_date > due_date
   end
   
   def paid?
