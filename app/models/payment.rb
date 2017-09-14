@@ -11,11 +11,10 @@ class Payment < Micro::Finances::ApplicationRecord
 
   validates :description, :effect, :due_date, :due_value, presence: true
 
-  scope :revenue,       -> { where(effect: 'revenue') }
-  scope :cost,          -> { where(effect: 'cost') }
-  scope :open,          -> { where(payment_date: nil) }
-  scope :confirmed,     -> { where('payment_date IS NOT NULL') }
-  scope :with_interest, -> { where(effect: 'cost') }
+  scope :revenue,          -> { where(effect: 'revenue') }
+  scope :cost,             -> { where(effect: 'cost') }
+  scope :paid,             -> { where.not(payment_date: nil) }
+  scope :not_paid,         -> { where(payment_date: nil) }
 
   belongs_to :payable, polymorphic: true 
 
@@ -31,15 +30,13 @@ class Payment < Micro::Finances::ApplicationRecord
     @@cofigurations ||= default_config
   end
 
-  def interest
-    if payment_value
-      payment_value - due_value
-    else
-      0
-    end
+  def late?
+    return false if due_date.future?
+    
+    (payment_date and payment_date > due_date)
   end
   
-  def confirmed?
+  def paid?
     payment_date != nil
   end
 

@@ -25,10 +25,13 @@ ActiveRecord::Schema.define(version: 20170904234114) do
     t.date     "payment_date"
     t.decimal  "payment_value"
     t.string   "effect"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "payable_id"
     t.string   "payable_type"
+    t.decimal  "interest_value"
+    t.decimal  "penalty_value"
+    t.decimal  "discount_value"
   end
 
 end

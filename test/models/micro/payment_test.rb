@@ -8,22 +8,16 @@ module Micro::Finances
     end
 
     test "Payment.cost should return all the costs" do
-      assert_equal [payments(:taxi)], Payment.cost.to_a
+      assert_equal [payments(:taxi), payments(:office)], Payment.cost.to_a
     end
 
-    test "Payment.confirmed should return all with payment_date filled" do
-      assert_equal [payments(:taxi)], Payment.confirmed.to_a
+    test "Payment.paid should return all with payment_date filled" do
+      assert_equal [payments(:taxi), payments(:office)], Payment.paid.to_a
     end
 
-    test "Payment.open should return all with payment_date empty" do
-      assert_equal [payments(:contract)], Payment.open.to_a
+    test "Payment.not_paid should return all with payment_date empty" do
+      assert_equal [payments(:contract)], Payment.not_paid.to_a
     end
-
-    test "Payment.with_interest should return all with interest" do
-      assert_equal [payments(:taxi)], Payment.with_interest.to_a
-    end
-
-
 
     test "it should validate presence of description" do
       p = Payment.new
@@ -62,14 +56,26 @@ module Micro::Finances
       assert !p.revenue?
     end
 
-    test "#interest should return the difference between due and paid values" do
-      p = Payment.new(due_value: 10, payment_value: 15)
-      assert_equal 5, p.interest
+    test "#paid? should return true when the payment date is set" do
+      p = Payment.new
+      p.payment_date = Date.today
+      assert p.paid?
+
+      p.payment_date = nil
+      assert !p.paid?
     end
 
-    test "#interest should return 0 if the due value or the paid value is blank" do
-      p = Payment.new(due_value: 10, payment_value: nil)
-      assert_equal 0, p.interest
+    test "#late? should return true when the payment_date > due_date" do
+      p = Payment.new
+      p.due_date     = Date.today
+      p.payment_date = Date.today + 1.day
+      assert p.late?
+    end
+
+    test "#late? should return false due_date is on future" do
+      p = Payment.new
+      p.due_date = Date.tomorrow
+      assert !p.late?
     end
 
     test "it should be able to associate itself to a any model, like a Client" do
