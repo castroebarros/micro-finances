@@ -3,6 +3,7 @@ class Payment < Micro::Finances::ApplicationRecord
 
   enumerize :effect, in: %w(revenue cost), default: :revenue, predicates: true, scope: true
 
+  usar_como_dinheiro :value
   usar_como_dinheiro :due_value
   usar_como_dinheiro :interest_value
   usar_como_dinheiro :penalty_value
@@ -17,7 +18,14 @@ class Payment < Micro::Finances::ApplicationRecord
   scope :not_paid,         -> { where(payment_date: nil) }
   scope :late,             -> { not_paid.where("due_date < ?", Date.today) }
 
-  belongs_to :payable, polymorphic: true 
+  # Payable is used to create a relationship with other model, like Client,
+  # Contract, Project, etc. 
+  #
+  # In same cases, for example, for costs, you can left it blank. It's why
+  # it is not required.
+  belongs_to :payable, polymorphic: true, required: false
+
+  before_save :set_calculated_fields
 
   def self.default_config
     {
@@ -62,6 +70,22 @@ class Payment < Micro::Finances::ApplicationRecord
       self.penalty_value  = 0
     end
     self.calculate_payment_value
+  end
+
+  def set_calculated_fields
+    # date represents the real date of this payment.
+    self.date          = (self.payment_date || self.due_date)
+
+    # value represents the real value of this payment.
+    self.value         = self.due_value
+    self.value         = self.payment_value if self.payment_date
+    self.value         = self.value * -1    if self.effect.cost?
+
+    # period helps to take easy handle the payments monthly. 
+    self.period        = self.due_date.strftime('%Y%m')
+
+    # the payment's value need to be blank if its date is not set.
+    self.payment_value = nil if self.payment_date.nil?
   end
 
 end

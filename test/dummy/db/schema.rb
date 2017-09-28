@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170904234114) do
+ActiveRecord::Schema.define(version: 20170928145742) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name"
@@ -32,6 +32,9 @@ ActiveRecord::Schema.define(version: 20170904234114) do
     t.decimal  "interest_value"
     t.decimal  "penalty_value"
     t.decimal  "discount_value"
+    t.date     "date"
+    t.decimal  "value"
+    t.integer  "period"
   end
 
 end
