@@ -1,7 +1,7 @@
 class Payment < Micro::Finances::ApplicationRecord
   extend Enumerize
 
-  enumerize :effect, in: %w(revenue cost), default: :revenue, predicates: true
+  enumerize :effect, in: %w(revenue cost), default: :revenue, predicates: true, scope: true
 
   usar_como_dinheiro :due_value
   usar_como_dinheiro :interest_value
