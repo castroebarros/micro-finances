@@ -69,10 +69,17 @@ module Micro::Finances
       assert !p.paid?
     end
 
-    test "#late? should return true when the payment_date > due_date" do
+    test "#late? should return false when the payment_date = due_date" do
       p = Payment.new
       p.due_date     = Date.today
-      p.payment_date = Date.today + 1.day
+      p.payment_date = Date.today
+      assert !p.late?
+    end
+
+    test "#late? should return true when the payment_date > due_date" do
+      p = Payment.new
+      p.due_date     = Date.today - 1.day
+      p.payment_date = Date.today
       assert p.late?
     end
 

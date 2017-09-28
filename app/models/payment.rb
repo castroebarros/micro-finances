@@ -32,7 +32,7 @@ class Payment < Micro::Finances::ApplicationRecord
   end
 
   def late?
-    return false if due_date.future?
+    return false if due_date.future? or due_date.today?
     return true  if payment_date.nil?
     return true  if payment_date > due_date
   end
