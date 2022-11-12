@@ -3,12 +3,12 @@ class Payment < Micro::Finances::ApplicationRecord
 
   enumerize :effect, in: %w(revenue cost), default: :revenue, predicates: true, scope: true
 
-  usar_como_dinheiro :value
-  usar_como_dinheiro :due_value
-  usar_como_dinheiro :interest_value
-  usar_como_dinheiro :penalty_value
-  usar_como_dinheiro :discount_value
-  usar_como_dinheiro :payment_value
+  composed_of :value, class_name: 'Reais', converter: :converter
+  composed_of :due_value, class_name: 'Reais', converter: :converter, mapping: %w(due_value value)
+  composed_of :interest_value, class_name: 'Reais', converter: :converter, mapping: %w(interest_value value)
+  composed_of :penalty_value, class_name: 'Reais', converter: :converter, mapping: %w(panalty_value value)
+  composed_of :discount_value, class_name: 'Reais', converter: :converter, mapping: %w(discount_value value)
+  composed_of :payment_value, class_name: 'Reais', converter: :converter, mapping: %w(payment_value value)
 
   validates :description, :effect, :due_date, :due_value, presence: true
 
@@ -85,7 +85,7 @@ class Payment < Micro::Finances::ApplicationRecord
     self.period        = self.due_date.strftime('%Y%m')
 
     # the payment's value need to be blank if its date is not set.
-    self.payment_value = nil if self.payment_date.nil?
+    self.payment_value = 0 if self.payment_date.nil?
   end
 
 end
