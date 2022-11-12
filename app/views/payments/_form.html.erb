@@ -4,7 +4,7 @@
     <div class="panel-body">
       <% if payment.errors.any? %>
         <div id="error_explanation">
-          <h2><%= pluralize(payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
+          <h2>Atenção!</h2>
 
           <ul>
           <% payment.errors.full_messages.each do |message| %>
